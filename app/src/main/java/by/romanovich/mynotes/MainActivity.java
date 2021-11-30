@@ -14,10 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements Constants {
 
+    private static final int Request_Code_Notes_Activity = 99;
     private Button btnPlus;
 
     private EditText titleText;
-
+// создаем и соханяем данные в аккаунт
     private Account account;
 
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
                 //Заменяем элемент на фрагмент
                 .replace(R.id.fragmentContainer, nameOfTheNoteFragment)
                 .commit();
-
+// инициилизируем аккаунт
         account = new Account();
 
         initViews();
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
             populateAccount();
             openNotesActivityForResult();
         });
-
+// надо разобраться как создавать новую заметку
         btnPlus = (Button) findViewById(R.id.buttonPlus);
         btnPlus.setOnClickListener(view -> {
             populateAccount();
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     private void openNotesActivityForResult() {
         Intent runNotes = new Intent(MainActivity.this, NotesActivity.class);
+        //сохраняем putExtra работает как parceleble
         runNotes.putExtra(YOUR_ACCOUNT, account);
         someActivityResultLauncher.launch(runNotes);
     }
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private void populateViews() {
         titleText.setText(account.getTitleText());
     }
-
+//заполняем аккаунт ТитлТекст
     private void populateAccount() {
         account.setTitleText(titleText.getText().toString());
     }
