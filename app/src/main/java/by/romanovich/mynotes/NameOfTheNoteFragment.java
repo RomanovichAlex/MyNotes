@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NameOfTheNoteFragment extends Fragment {
-    EditText titleText;
 
     private static final String CURRENT_NOTE = "CurrentNote";
     // Текущая позиция (выбранная заметка)
@@ -54,8 +53,6 @@ public class NameOfTheNoteFragment extends Fragment {
     private void initList(View view) {
         LinearLayout layoutView = (LinearLayout) view;
         String [] notes = getResources().getStringArray(R.array.nameOfTheNote);
-        //Чтение  названий заметок
-        titleText = (EditText) view.findViewById(R.id.titleText);
         // В этом цикле создаём элемент TextView, заполняем его значениями и добавляем на экран.
         for (int i=0; i<notes.length;i++) {
             String note=notes[i];
