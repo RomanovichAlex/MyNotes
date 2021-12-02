@@ -2,6 +2,7 @@ package by.romanovich.mynotes;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,6 @@ public class NameOfTheNoteFragment extends Fragment {
     @Override
     public void onViewCreated (@NonNull View view, @NonNull Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-
         initList(view);
 }
 
@@ -49,21 +49,21 @@ public class NameOfTheNoteFragment extends Fragment {
             layoutView.addView(tv);
             final int position=i;
             tv.setOnClickListener(v -> {
-                int currentPosition = position;
-                showPortDescription(position);
+                Note currentNote = new Note(position, note);
+                showDescription(currentNote);
             });
         }
     }
 
     // Показываем описание в портретной ориентации
-    private void showPortDescription(int index) {
-        NoteFragment noteFragment = NoteFragment.newInstance(index);
+    private void showDescription(Note note) {
+        NoteFragment noteFragment = NoteFragment.newInstance(note);
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // добавляем фрагмент через add
-        fragmentTransaction.add(R.id.fragmentContainer, noteFragment);
-        fragmentTransaction.addToBackStack("");
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        fragmentTransaction.commit();
+        fragmentTransaction.add(R.id.fragmentContainer, noteFragment.newInstance(note))
+                .addToBackStack("")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
     }
 }
