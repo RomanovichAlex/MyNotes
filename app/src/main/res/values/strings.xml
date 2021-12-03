@@ -7,4 +7,8 @@
     <string name="menuadd">Добавить</string>
     <string name="exit">Выход</string>
     <string name="about">О разработчиках</string>
+    <string name="drawer_header">Разработчик</string>
+    <string name="photo">photo</string>
+    <string name="navigation_drawer_open">drawer_open</string>
+    <string name="navigation_drawer_close">drawer_close</string>
 </resources>
