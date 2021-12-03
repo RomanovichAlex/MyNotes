@@ -1,13 +1,9 @@
 package by.romanovich.mynotes;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,14 +38,14 @@ public class NameOfTheNoteFragment extends Fragment {
         String [] notes = getResources().getStringArray(R.array.nameOfTheNote);
         // В этом цикле создаём элемент TextView, заполняем его значениями и добавляем на экран.
         for (int i=0; i<notes.length;i++) {
-            String note=notes[i];
+            String titleText=notes[i];
             TextView tv = new TextView(getContext());
-            tv.setText(note);
+            tv.setText(titleText);
             tv.setTextSize(30);
             layoutView.addView(tv);
-            final int position=i;
+            final String position="Note";
             tv.setOnClickListener(v -> {
-                Note currentNote = new Note(position, note);
+                Note currentNote = new Note(position,titleText);
                 showDescription(currentNote);
             });
         }

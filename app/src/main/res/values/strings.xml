@@ -2,4 +2,9 @@
     <string name="app_name">MyNotes</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="note_title">Note</string>
+    <string name="menuclear">Очистить</string>
+    <string name="menuadd">Добавить</string>
+    <string name="exit">Выход</string>
+    <string name="about">О разработчиках</string>
 </resources>
