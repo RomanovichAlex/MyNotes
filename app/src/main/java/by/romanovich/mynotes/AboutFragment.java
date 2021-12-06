@@ -26,12 +26,10 @@ public class AboutFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, @NonNull MenuInflater inflater) {
         MenuItem item = menu.findItem(R.id.action_about);
-        if (item != null) {
-            item.setVisible(false);
-        }
+        if (item != null) { item.setVisible(false); }
         MenuItem item1 = menu.findItem(R.id.menu_add);
-        if (item1 != null) {
-            item1.setVisible(false);
-        }
+        if (item1 != null) { item1.setVisible(false); }
+        MenuItem item2 = menu.findItem(R.id.menu_clear);
+        if (item2 != null) { item2.setVisible(false); }
     }
 }

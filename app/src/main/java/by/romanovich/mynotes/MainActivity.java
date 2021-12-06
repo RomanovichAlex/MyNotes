@@ -1,6 +1,7 @@
 package by.romanovich.mynotes;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     drawer.closeDrawers();
                     return true;
                     case R.id.action_exit:
-                        finish();
+                        questionBeforeLeaving();
                         return true;
             }
             return false;
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 openAboutFragment();
                 return true;
             case R.id.action_exit:
-                finish();
+                questionBeforeLeaving();
                 return true;
             case R.id.menu_add:
                 Toast.makeText(this, R.string.ADD_Note, Toast.LENGTH_LONG).show();
@@ -104,6 +106,26 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void questionBeforeLeaving() {
+        new AlertDialog.Builder(this)
+                .setTitle("Вы точно хотите выйти из приложения?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "Досвидания!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MainActivity.this, "Вот и ладненько!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNeutralButton("Cancel", null)
+                .show();
     }
 
     private void openAboutFragment() {
