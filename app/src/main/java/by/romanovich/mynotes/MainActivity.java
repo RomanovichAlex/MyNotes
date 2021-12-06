@@ -1,5 +1,6 @@
 package by.romanovich.mynotes;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +23,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +97,10 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.menu_add:
-
+                Toast.makeText(this, R.string.ADD_Note, Toast.LENGTH_LONG).show();
                 return true;
             case R.id.menu_clear:
-
+                Toast.makeText(this, R.string.Clear_Note, Toast.LENGTH_LONG).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
