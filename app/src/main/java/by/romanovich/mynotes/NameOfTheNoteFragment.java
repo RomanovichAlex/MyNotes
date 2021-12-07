@@ -54,7 +54,6 @@ public class NameOfTheNoteFragment extends Fragment {
             tv.setText(currentNote);
             tv.setTextSize(30);
             layoutView.addView(tv);
-            final int position=i;
             tv.setOnClickListener(v -> {
                 showDescription(new Note(currentNote,currentFullNote));
             });

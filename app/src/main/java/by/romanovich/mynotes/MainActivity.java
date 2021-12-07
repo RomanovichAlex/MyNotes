@@ -132,6 +132,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("")
-                .add(R.id.fragmentContainer, new AboutFragment()).commit();
+                .replace(R.id.fragmentContainer, new AboutFragment(), null).commit();
     }
 }
