@@ -32,24 +32,35 @@ public class NameOfTheNoteFragment extends Fragment {
         initList(view);
 }
 
-    //Передаем layot, создаём список заметок на экране из массива в ресурсах
+    // Создаём список городов на экране из массива в ресурсах
     private void initList(View view) {
         LinearLayout layoutView = (LinearLayout) view;
-        String [] notes = getResources().getStringArray(R.array.nameOfTheNote);
-        // В этом цикле создаём элемент TextView, заполняем его значениями и добавляем на экран.
-        for (int i=0; i<notes.length;i++) {
-            String titleText=notes[i];
+        String[] notes = getResources().getStringArray(R.array.nameOfTheNote);
+        String[] fullNote = getResources().getStringArray(R.array.fullNote);
+// При помощи этого объекта будем доставать элементы, спрятанные в item.xml
+        LayoutInflater ltInflater = getLayoutInflater();
+
+// В этом цикле ищем элемент TextView в item.xml,
+// заполняем его значениями
+// и добавляем на экран item.xml.
+// Кроме того, создаём обработку касания на элемент
+        for (int i = 0; i < notes.length; i++) {
+            String currentNote = notes[i];
+            String currentFullNote = fullNote[i];
+// Достаём элемент из item.xml
+            View item = ltInflater.inflate(R.layout.item, layoutView, false);
+// Находим в этом элементе TextView
             TextView tv = new TextView(getContext());
-            tv.setText(titleText);
+            tv.setText(currentNote);
             tv.setTextSize(30);
             layoutView.addView(tv);
-            final String position="Note";
+            final int position=i;
             tv.setOnClickListener(v -> {
-                Note currentNote = new Note(position,titleText);
-                showDescription(currentNote);
+                showDescription(new Note(currentNote,currentFullNote));
             });
         }
     }
+
 
     // Показываем описание в портретной ориентации
     private void showDescription(Note note) {

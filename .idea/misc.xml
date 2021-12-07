@@ -4,7 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout-land/activity_main.xml" value="0.176" />
-        <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/activity_notes.xml" value="0.264" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/drawer_header.xml" value="0.12708333333333333" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/drower_header.xml" value="0.4" />
@@ -13,9 +13,11 @@
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/fragment_note.xml" value="0.264" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/fragment_notes.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/fragment_title_and_discription.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/layout/item.xml" value="0.128125" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/menu/drawer_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/menu/drower_menu.xml" value="0.2" />
         <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/menu/menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Admin/Documents/GitHub/21-11-24.Romanovich/MyNotes/app/src/main/res/menu/pop_up_menu.xml" value="0.128125" />
       </map>
     </option>
   </component>
