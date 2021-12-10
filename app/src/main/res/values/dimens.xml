@@ -2,4 +2,6 @@
 <resources>
     <dimen name="H1">25sp</dimen>
     <dimen name="H2">20sp</dimen>
+    <dimen name="heightImage">60dp</dimen>
+
 </resources>

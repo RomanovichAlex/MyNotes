@@ -15,6 +15,7 @@
         <item name="actionOverflowButtonStyle">@style/actionOverflowButtonStyle</item>
         <item name="android:actionMenuTextColor"></item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="android:textColor">@color/colorText</item>
 
     </style>
 

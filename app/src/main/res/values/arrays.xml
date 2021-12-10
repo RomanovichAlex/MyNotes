@@ -9,12 +9,20 @@
     </string-array>
 
     <string-array name="fullNote">
-        <item>description</item>
-        <item>description</item>
-        <item>description</item>
-        <item>description</item>
-        <item>description</item>
+        <item>description1</item>
+        <item>description2</item>
+        <item>description3</item>
+        <item>description4</item>
+        <item>description5</item>
     </string-array>
+
+    <array name="pictures">
+        <item>@drawable/nature1</item>
+        <item>@drawable/nature2</item>
+        <item>@drawable/nature3</item>
+        <item>@drawable/nature4</item>
+        <item>@drawable/nature5</item>
+    </array>
 
 
 </resources>
