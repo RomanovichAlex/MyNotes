@@ -1,28 +1,26 @@
 package by.romanovich.mynotes;
 
-import android.content.Context;
+
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+
 
 import com.google.android.material.navigation.NavigationView;
+
+import ui.ListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,23 +31,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initToolbar();
-        
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragmentContainer, new NoteFragment()).commit();
-
-
-        // Создаём фрагмент
-        NameOfTheNoteFragment nameOfTheNoteFragment = new NameOfTheNoteFragment();
-        //Вызываем фрагмент менеджер
-        getSupportFragmentManager()
-                //Открываем транзакцию
-                .beginTransaction()
-                //Заменяем элемент на фрагмент
-                .replace(R.id.fragmentContainer, nameOfTheNoteFragment)
-                .commit();
+        addFragment(ListFragment.newInstance());
     }
+
+
+    private void addFragment(Fragment fragment) {
+//Получить менеджер фрагментов
+        FragmentManager fragmentManager = getSupportFragmentManager();
+// Открыть транзакцию
+        FragmentTransaction fragmentTransaction =
+                fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.list_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+// Закрыть транзакцию
+        fragmentTransaction.commit();
+    }
+
+
 // Инициализируем Toolbar
     private void initToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -132,6 +130,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("")
-                .replace(R.id.fragmentContainer, new AboutFragment(), null).commit();
+                .replace(R.id.list_container, new AboutFragment(), null).commit();
     }
 }
