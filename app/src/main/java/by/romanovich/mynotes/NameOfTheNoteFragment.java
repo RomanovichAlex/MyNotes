@@ -45,17 +45,18 @@ public class NameOfTheNoteFragment extends Fragment {
 // и добавляем на экран item.xml.
 // Кроме того, создаём обработку касания на элемент
         for (int i = 0; i < notes.length; i++) {
-            String currentNote = notes[i];
-            String currentFullNote = fullNote[i];
+            String titleNote = notes[i];
+            String fulNote = fullNote[i];
 // Достаём элемент из item.xml
             View item = ltInflater.inflate(R.layout.item, layoutView, false);
+            TextView tvTitleNote = item.findViewById(R.id.textView);
 // Находим в этом элементе TextView
-            TextView tv = new TextView(getContext());
-            tv.setText(currentNote);
-            tv.setTextSize(30);
-            layoutView.addView(tv);
-            tv.setOnClickListener(v -> {
-                showDescription(new Note(currentNote,currentFullNote));
+            tvTitleNote.setText(titleNote);
+            layoutView.addView(item);
+            final int position = i;
+            tvTitleNote.setOnClickListener(v -> {
+                Note currentNote = new Note(titleNote,fulNote);
+                showDescription(currentNote);
             });
         }
     }
