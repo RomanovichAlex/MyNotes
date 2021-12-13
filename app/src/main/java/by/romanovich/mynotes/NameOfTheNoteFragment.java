@@ -49,7 +49,7 @@ public class NameOfTheNoteFragment extends Fragment {
             String fulNote = fullNote[i];
 // Достаём элемент из item.xml
             View item = ltInflater.inflate(R.layout.item, layoutView, false);
-            TextView tvTitleNote = item.findViewById(R.id.textView);
+            TextView tvTitleNote = item.findViewById(R.id.noteTitle);
 // Находим в этом элементе TextView
             tvTitleNote.setText(titleNote);
             layoutView.addView(item);
@@ -68,7 +68,7 @@ public class NameOfTheNoteFragment extends Fragment {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // добавляем фрагмент через add
-        fragmentTransaction.add(R.id.list_container, noteFragment.newInstance(note))
+        fragmentTransaction.add(R.id.fragment_container, noteFragment.newInstance(note))
                 .addToBackStack("")
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();

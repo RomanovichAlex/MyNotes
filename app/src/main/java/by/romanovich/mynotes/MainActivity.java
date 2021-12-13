@@ -31,21 +31,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initToolbar();
-        addFragment(ListFragment.newInstance());
+        inflateListFragment();
     }
 
 
-    private void addFragment(Fragment fragment) {
-//Получить менеджер фрагментов
-        FragmentManager fragmentManager = getSupportFragmentManager();
-// Открыть транзакцию
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.list_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-// Закрыть транзакцию
-        fragmentTransaction.commit();
-    }
+
+        private void inflateListFragment() {
+            ListFragment listFragment = new ListFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack();
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, listFragment, null)
+                    .addToBackStack(null)
+                    .commit();
+        }
 
 
 // Инициализируем Toolbar
@@ -130,6 +129,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .addToBackStack("")
-                .replace(R.id.list_container, new AboutFragment(), null).commit();
+                .replace(R.id.fragment_container, new AboutFragment(), null).commit();
     }
 }

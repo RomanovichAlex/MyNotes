@@ -9,16 +9,12 @@
     android:focusable="true"
     tools:context=".NoteFragment">
 
-        <EditText
-            android:id="@+id/noteTitle"
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nameOfTheNoteConteiner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@+id/nameOfTheNote"
-            android:hint="Title"
-            android:textSize="@dimen/H1"
-            />
-
-
+            android:layout_weight="1" />
 
         <EditText
         android:id="@+id/noteDetails"
