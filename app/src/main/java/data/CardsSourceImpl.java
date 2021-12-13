@@ -7,10 +7,11 @@ import java.util.List;
 import by.romanovich.mynotes.R;
 
 public class CardsSourceImpl implements CardsSource {
+
     private List<CardData> dataSource;
     private Resources resources; // ресурсы приложения
     public CardsSourceImpl(Resources resources) {
-        dataSource = new ArrayList<>(4);
+        dataSource = new ArrayList<>(5);
         this.resources = resources;
     }
     public CardsSourceImpl init(){
@@ -44,5 +45,22 @@ public class CardsSourceImpl implements CardsSource {
     }
     public int size(){
         return dataSource.size();
+    }
+
+    @Override
+    public void deleteCardData(int position) {
+        dataSource.remove(position);
+    }
+    @Override
+    public void updateCardData(int position, CardData cardData) {
+        dataSource.set(position, cardData);
+    }
+    @Override
+    public void addCardData(CardData cardData) {
+        dataSource.add(cardData);
+    }
+    @Override
+    public void clearCardData() {
+        dataSource.clear();
     }
 }
