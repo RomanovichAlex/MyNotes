@@ -1,6 +1,14 @@
 package ui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,18 +17,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.ContextMenu;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import java.util.zip.Inflater;
-
+import by.romanovich.mynotes.MainActivity;
+import by.romanovich.mynotes.Navigation;
 import by.romanovich.mynotes.R;
+import by.romanovich.mynotes.observe.Observer;
+import by.romanovich.mynotes.observe.Publisher;
 import data.CardData;
 import data.CardsSource;
 import data.CardsSourceImpl;
@@ -31,12 +32,30 @@ public class ListFragment extends Fragment {
     private CardsSource data;
     private ListFragmentAdapter adapter;
     private RecyclerView recyclerView;
+    private Navigation navigation;
+    private Publisher publisher;
+    // признак, что при повторном открытии фрагмента
+// (возврате из фрагмента, добавляющего запись)
+// надо прыгнуть на последнюю запись
+    private boolean moveToLastPosition;
+
 
 
 
     public static ListFragment newInstance() {
         return new ListFragment();
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+// Получим источник данных для списка
+// Поскольку onCreateView запускается каждый раз
+// при возврате в фрагмент, данные надо создавать один раз
+        data = new CardsSourceImpl(getResources()).init();
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -45,23 +64,43 @@ public class ListFragment extends Fragment {
                 false);
         recyclerView = view.findViewById(R.id.recycler_view_lines);
         // Получим источник данных для списка
-        data = new CardsSourceImpl(getResources()).init();
         initView(view);
         setHasOptionsMenu(true);
         return view;
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        MainActivity activity = (MainActivity)context;
+        navigation = activity.getNavigation();
+        publisher = activity.getPublisher();
+    }
+
+    @Override
+    public void onDetach() {
+        navigation = null;
+        publisher = null;
+        super.onDetach();
+    }
+
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.menu_add:
-                data.addCardData(new CardData("Заголовок " + data.size(),
-                        "Описание " + data.size(),
-                        R.drawable.nature1,
-                        false));
-                adapter.notifyItemInserted(data.size() - 1);
-                recyclerView.scrollToPosition(data.size() - 1);
+                navigation.addFragment(CardFragment.newInstance(), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.addCardData(cardData);
+                        adapter.notifyItemInserted(data.size() - 1);
+// это сигнал, чтобы вызванный метод onCreateView
+// перепрыгнул на конец списка
+                        moveToLastPosition = true;
+                    }
+                });
                 return true;
             case R.id.menu_clear:
                 data.clearCardData();
@@ -82,6 +121,7 @@ public class ListFragment extends Fragment {
     private void initRecyclerView(){
 // Эта установка служит для повышения производительности системы
         recyclerView.setHasFixedSize(true);
+
 // Будем работать со встроенным менеджером
         LinearLayoutManager layoutManager = new
                 LinearLayoutManager(getContext());
@@ -117,12 +157,22 @@ public class ListFragment extends Fragment {
     }
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = adapter.getMenuPosition();
         switch(item.getItemId()) {
             case R.id.action_update:
-// Do some stuff
+                navigation.addFragment(CardFragment.newInstance(data.getCardData(position)),
+                        true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.updateCardData(position, cardData);
+                        adapter.notifyItemChanged(position);
+                    }
+                });
                 return true;
             case R.id.action_delete:
-// Do some stuff
+                data.deleteCardData(position);
+                adapter.notifyItemRemoved(position);
                 return true;
         }
         return super.onContextItemSelected(item);

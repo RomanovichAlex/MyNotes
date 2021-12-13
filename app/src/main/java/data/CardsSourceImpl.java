@@ -3,6 +3,7 @@ package data;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import by.romanovich.mynotes.R;
 
@@ -24,7 +25,7 @@ public class CardsSourceImpl implements CardsSource {
 // заполнение источника данных
         for (int i = 0; i < descriptions.length; i++) {
             dataSource.add(new CardData(titles[i], descriptions[i], pictures[i],
-                    false));
+                    false, Calendar.getInstance().getTime()));
         }
         return this;
     }

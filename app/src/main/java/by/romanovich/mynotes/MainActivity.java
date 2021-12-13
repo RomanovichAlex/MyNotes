@@ -12,39 +12,35 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 
 
 
 import com.google.android.material.navigation.NavigationView;
 
+import by.romanovich.mynotes.observe.Publisher;
 import ui.ListFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Navigation navigation;
+    private Publisher publisher = new Publisher();
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        navigation = new Navigation(getSupportFragmentManager());
 
         initToolbar();
-        inflateListFragment();
+        getNavigation().addFragment(ListFragment.newInstance(), false);
     }
 
 
-
-        private void inflateListFragment() {
-            ListFragment listFragment = new ListFragment();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStack();
-            fragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, listFragment, null)
-                    .addToBackStack(null)
-                    .commit();
-        }
 
 
 // Инициализируем Toolbar
@@ -52,7 +48,22 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initDrawer(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    public Navigation getNavigation() {
+        return navigation;
+    }
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
 
     private void initDrawer(Toolbar toolbar) {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
