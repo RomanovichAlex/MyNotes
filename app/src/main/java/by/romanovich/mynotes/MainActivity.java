@@ -95,12 +95,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_exit:
                 questionBeforeLeaving();
                 return true;
-            case R.id.menu_add:
-                Toast.makeText(this, R.string.ADD_Note, Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.menu_clear:
-                Toast.makeText(this, R.string.Clear_Note, Toast.LENGTH_LONG).show();
-                return true;
         }
         return super.onOptionsItemSelected(item);
     }

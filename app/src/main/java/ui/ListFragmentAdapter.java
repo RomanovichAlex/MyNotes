@@ -8,6 +8,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import by.romanovich.mynotes.R;
 import data.CardData;
@@ -16,11 +17,13 @@ import data.CardsSource;
 public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapter.ViewHolder> {
     private final static String TAG = "ListFragmentAdapter";
     private CardsSource dataSource;
+    private Fragment fragment;
     private OnItemClickListener itemClickListener; // Слушатель будет устанавливаться извне
     // Передаём в конструктор источник данных
 // В нашем случае это массив, но может быть и запрос к БД
-   public ListFragmentAdapter(CardsSource dataSource) {
+   public ListFragmentAdapter(CardsSource dataSource, Fragment fragment) {
       this.dataSource = dataSource;
+       this.fragment = fragment;
    }
 // Создать новый элемент пользовательского интерфейса
 // Запускается менеджером
@@ -70,9 +73,12 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
             super(itemView);
 
             titleText = itemView.findViewById(R.id.title);
-            noteDetails = itemView.findViewById(R.id.noteDetails);
+            noteDetails = itemView.findViewById(R.id.title);
             image = itemView.findViewById(R.id.imageView);
             ready = itemView.findViewById(R.id.ready);
+
+            registerContextMenu(itemView);
+
 // Обработчик нажатий на картинке
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,6 +89,14 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
                 }
             });
         }
+
+        private void registerContextMenu(@NonNull View itemView) {
+            if (fragment != null){
+                fragment.registerForContextMenu(itemView);
+            }
+        }
+
+
         public void setData(CardData cardData){
             titleText.setText(cardData.getTitleText());
             noteDetails.setText(cardData.getNoteDetails());

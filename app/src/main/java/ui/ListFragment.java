@@ -3,9 +3,13 @@ package ui;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +33,7 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerView;
 
 
+
     public static ListFragment newInstance() {
         return new ListFragment();
     }
@@ -46,11 +51,6 @@ public class ListFragment extends Fragment {
         return view;
     }
 
-    // убераем пункты тоолбара
-    @Override
-    public void onCreateOptionsMenu(Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu, menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -71,6 +71,7 @@ public class ListFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void initView(View view) {
         recyclerView = view.findViewById(R.id.recycler_view_lines);
 // Получим источник данных для списка
@@ -87,8 +88,16 @@ public class ListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
 // Установим адаптер
-        adapter = new ListFragmentAdapter(data);
+        adapter = new ListFragmentAdapter(data, this);
         recyclerView.setAdapter(adapter);
+
+        // Добавим разделитель карточек
+        DividerItemDecoration itemDecoration = new
+                DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL);
+        itemDecoration.setDrawable(getResources().getDrawable(R.drawable.separator,
+                null));
+        recyclerView.addItemDecoration(itemDecoration);
+
         // Установим слушателя
         adapter.SetOnItemClickListener(new ListFragmentAdapter.OnItemClickListener() {
             @Override
@@ -98,4 +107,26 @@ public class ListFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v,
+                                    @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = requireActivity().getMenuInflater();
+        inflater.inflate(R.menu.card_menu, menu);
+    }
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_update:
+// Do some stuff
+                return true;
+            case R.id.action_delete:
+// Do some stuff
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
 }

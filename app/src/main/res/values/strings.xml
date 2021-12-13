@@ -11,8 +11,7 @@
     <string name="photo">photo</string>
     <string name="navigation_drawer_open">drawer_open</string>
     <string name="navigation_drawer_close">drawer_close</string>
-    <string name="ADD_Note">Добавить заметку</string>
-    <string name="Clear_Note">Очистить заметку</string>
-    <string name="delete">Delete</string>
+    <string name="delete">Удалить</string>
     <string name="item">Item</string>
+    <string name="update">Изменить</string>
 </resources>
