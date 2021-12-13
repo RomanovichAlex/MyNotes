@@ -12,41 +12,46 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.SimpleDateFormat;
+
 import by.romanovich.mynotes.R;
 import data.CardData;
 import data.CardsSource;
 
 public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapter.ViewHolder> {
+
     private final static String TAG = "ListFragmentAdapter";
     private CardsSource dataSource;
-    private Fragment fragment;
-    private OnItemClickListener itemClickListener; // Слушатель будет устанавливаться извне
-    // Передаём в конструктор источник данных
-// В нашем случае это массив, но может быть и запрос к БД
-   public ListFragmentAdapter(CardsSource dataSource, Fragment fragment) {
-      this.dataSource = dataSource;
-       this.fragment = fragment;
-   }
-// Создать новый элемент пользовательского интерфейса
-// Запускается менеджером
+    private final Fragment fragment;
+    private OnItemClickListener itemClickListener;
+    private int menuPosition;
+
+    public ListFragmentAdapter(CardsSource dataSource, Fragment fragment){
+        this.dataSource = dataSource;
+        this.fragment = fragment;
+    }
+
     @NonNull
     @Override
-    public ListFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ListFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 // Создаём новый элемент пользовательского интерфейса
 // через Inflater
-        View v = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item, viewGroup, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         Log.d(TAG, "onCreateViewHolder");
 // Здесь можно установить всякие параметры
-        return new ViewHolder(v);
+        return new ViewHolder(view);
     }
+
+    // Создать новый элемент пользовательского интерфейса
+// Запускается менеджером
     // Заменить данные в пользовательском интерфейсе
 // Вызывается менеджером
     @Override
-    public void onBindViewHolder(@NonNull ListFragmentAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull ListFragmentAdapter.ViewHolder holder, int position) {
 // Получить элемент из источника данных (БД, интернет...)
 // Вынести на экран используя ViewHolder
-        viewHolder.setData(dataSource.getCardData(i));
+        holder.setData(dataSource.getCardData(position));
         Log.d(TAG, "onBindViewHolder");
     }
     // Вернуть размер данных, вызывается менеджером
@@ -54,10 +59,20 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
     public int getItemCount() {
         return dataSource.size();
     }
+
     // Сеттер слушателя нажатий
     public void SetOnItemClickListener(OnItemClickListener itemClickListener){
         this.itemClickListener = itemClickListener;
     }
+
+    // Передаём в конструктор источник данных
+// В нашем случае это массив, но может быть и запрос к БД
+
+    public int getMenuPosition() {
+        return menuPosition;
+    }
+
+
     // Интерфейс для обработки нажатий, как в ListView
     public interface OnItemClickListener {
         void onItemClick(View view , int position);
@@ -66,20 +81,25 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
 // Сложные данные могут потребовать несколько View на
 // один пункт списка
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleText;
-        private TextView noteDetails;
+        private TextView title;
+        private TextView description;
         private AppCompatImageView image;
         private CheckBox ready;
+        private TextView date;
 
-        public ViewHolder(@NonNull View itemView) {
+
+
+        public ViewHolder(@NonNull  final View itemView) {
             super(itemView);
 
-            titleText = itemView.findViewById(R.id.title);
-            noteDetails = itemView.findViewById(R.id.title);
+            title = itemView.findViewById(R.id.title);
+            description = itemView.findViewById(R.id.description);
             image = itemView.findViewById(R.id.imageView);
             ready = itemView.findViewById(R.id.ready);
+            date = itemView.findViewById(R.id.date);
 
             registerContextMenu(itemView);
+
 
 // Обработчик нажатий на картинке
             image.setOnClickListener(new View.OnClickListener() {
@@ -90,30 +110,42 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
                     }
                 }
             });
-
+// Обработчик долгих нажатий на картинке
         image.setOnLongClickListener(new View.OnLongClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public boolean onLongClick(View v) {
+            public boolean onLongClick(View view) {
+                menuPosition = getLayoutPosition();
                 itemView.showContextMenu(10,10);
                 return true;
             }
         });
     }
 
+
         private void registerContextMenu(@NonNull View itemView) {
             if (fragment != null){
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        menuPosition = getLayoutPosition();
+                        return false;
+                    }
+                });
                 fragment.registerForContextMenu(itemView);
             }
         }
 
 
         public void setData(CardData cardData){
-            titleText.setText(cardData.getTitleText());
-            noteDetails.setText(cardData.getNoteDetails());
+            title.setText(cardData.getTitle());
+            description.setText(cardData.getDescription());
             ready.setChecked(cardData.isReady());
             image.setImageResource(cardData.getPicture());
+            date.setText(new SimpleDateFormat("dd-MM-yy").format(cardData.getDate()));
+
         }
+
     }
 }
 
