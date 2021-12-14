@@ -112,7 +112,7 @@ public class CardFragment extends Fragment {
     }
     private CardData collectCardData(){
         String title = this.title.getText().toString();
-        String description = this.description.getText().toString();
+        String description = this.description.toString();
         Date date = getDateFromDatePicker();
         int picture;
         boolean ready;

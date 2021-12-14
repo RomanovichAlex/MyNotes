@@ -20,38 +20,38 @@ import data.CardData;
 import data.CardsSource;
 
 public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapter.ViewHolder> {
-
     private final static String TAG = "ListFragmentAdapter";
     private CardsSource dataSource;
     private final Fragment fragment;
-    private OnItemClickListener itemClickListener;
     private int menuPosition;
 
-    public ListFragmentAdapter(CardsSource dataSource, Fragment fragment){
-        this.dataSource = dataSource;
-        this.fragment = fragment;
-    }
-
+    private OnItemClickListener itemClickListener; // Слушатель будет устанавливаться извне
+    // Передаём в конструктор источник данных
+// В нашем случае это массив, но может быть и запрос к БД
+   public ListFragmentAdapter(CardsSource dataSource, Fragment fragment) {
+      this.dataSource = dataSource;
+      this.fragment = fragment;
+   }
+// Создать новый элемент пользовательского интерфейса
+// Запускается менеджером
     @NonNull
     @Override
-    public ListFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 // Создаём новый элемент пользовательского интерфейса
 // через Inflater
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
+        View v = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.item, viewGroup, false);
         Log.d(TAG, "onCreateViewHolder");
 // Здесь можно установить всякие параметры
-        return new ViewHolder(view);
+        return new ViewHolder(v);
     }
-
-    // Создать новый элемент пользовательского интерфейса
-// Запускается менеджером
     // Заменить данные в пользовательском интерфейсе
 // Вызывается менеджером
     @Override
-    public void onBindViewHolder(@NonNull ListFragmentAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListFragmentAdapter.ViewHolder viewHolder, int i) {
 // Получить элемент из источника данных (БД, интернет...)
 // Вынести на экран используя ViewHolder
-        holder.setData(dataSource.getCardData(position));
+        viewHolder.setData(dataSource.getCardData(i));
         Log.d(TAG, "onBindViewHolder");
     }
     // Вернуть размер данных, вызывается менеджером
@@ -59,14 +59,10 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
     public int getItemCount() {
         return dataSource.size();
     }
-
     // Сеттер слушателя нажатий
     public void SetOnItemClickListener(OnItemClickListener itemClickListener){
         this.itemClickListener = itemClickListener;
     }
-
-    // Передаём в конструктор источник данных
-// В нашем случае это массив, но может быть и запрос к БД
 
     public int getMenuPosition() {
         return menuPosition;
@@ -114,7 +110,7 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
         image.setOnLongClickListener(new View.OnLongClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
-            public boolean onLongClick(View view) {
+            public boolean onLongClick(View v) {
                 menuPosition = getLayoutPosition();
                 itemView.showContextMenu(10,10);
                 return true;
