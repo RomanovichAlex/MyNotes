@@ -6,9 +6,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 public class Navigation {
     private final FragmentManager fragmentManager;
+
     public Navigation(FragmentManager fragmentManager){
         this.fragmentManager = fragmentManager;
     }
+
     public void addFragment(Fragment fragment, boolean useBackStack) {
 // Открыть транзакцию
         FragmentTransaction fragmentTransaction =

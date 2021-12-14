@@ -31,9 +31,16 @@ public class CardData implements Parcelable {
     }
 
     @Override
-    public int describeContents() {
-        return 0;
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeInt(picture);
+        dest.writeByte((byte) (ready ? 1 : 0));
+        dest.writeLong(date.getTime());
     }
+
+    @Override
+    public int describeContents() { return 0; }
 
     public static final Creator<CardData> CREATOR = new Creator<CardData>() {
         @Override
@@ -46,7 +53,6 @@ public class CardData implements Parcelable {
             return new CardData[size];
         }
     };
-
     public String getTitle() {
         return title;
     }
@@ -59,14 +65,6 @@ public class CardData implements Parcelable {
     public boolean isReady() {
         return ready;
     }
-    public Date getDate() { return date; }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(description);
-        dest.writeInt(picture);
-        dest.writeByte((byte) (ready ? 1 : 0));
-        dest.writeLong(date.getTime());
-    }
+    public Date getDate() { return date; }
 }
