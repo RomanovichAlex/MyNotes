@@ -24,8 +24,9 @@ import by.romanovich.mynotes.R;
 import by.romanovich.mynotes.observe.Observer;
 import by.romanovich.mynotes.observe.Publisher;
 import data.CardData;
-import data.CardsDataImpl;
 import data.CardsSource;
+import data.CardsSourceFirebaseImpl;
+import data.CardsSourceResponse;
 
 
 public class ListFragment extends Fragment {
@@ -39,50 +40,39 @@ public class ListFragment extends Fragment {
     // признак, что при повторном открытии фрагмента
 // (возврате из фрагмента, добавляющего запись)
 // надо прыгнуть на последнюю запись
+    private boolean moveToFirstPosition;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-// Получим источник данных для списка
-// Поскольку onCreateView запускается каждый раз
-// при возврате в фрагмент, данные надо создавать один раз
-        data = new CardsDataImpl(getResources()).init();
+    public static ListFragment newInstance() {
+        return new ListFragment();
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
 // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_list, container,
                 false);
         // Получим источник данных для списка
         initView(view);
         setHasOptionsMenu(true);
+        data = new CardsSourceFirebaseImpl().init(new CardsSourceResponse() {
+            @Override
+            public void initialized(CardsSource cardsData) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setDataSource(data);
+
         return view;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_add:
-                navigation.addFragment(CardFragment.newInstance(), true);
-                publisher.subscribe(new Observer() {
-                    @Override
-                    public void updateCardData(CardData cardData) {
-                        data.addCardData(cardData);
-                        adapter.notifyItemInserted(data.size() - 1);
-                    }
-                });
-                return true;
-            case R.id.menu_clear:
-                data.clearCardData();
-                adapter.notifyDataSetChanged();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return onItemSelected(item.getItemId()) ||
+                super.onOptionsItemSelected(item);
     }
+
 
 
     @Override
@@ -95,26 +85,51 @@ public class ListFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = adapter.getMenuPosition();
-        switch(item.getItemId()) {
-            case R.id.action_update:
-                navigation.addFragment(CardFragment.newInstance(data.getCardData(position)),
-                        true);
+        return onItemSelected(item.getItemId()) ||
+        super.onContextItemSelected(item);
+    }
+
+
+    private boolean onItemSelected(int menuItemId){
+        switch (menuItemId){
+            case R.id.menu_add:
+                navigation.addFragment(CardFragment.newInstance(), true);
                 publisher.subscribe(new Observer() {
                     @Override
                     public void updateCardData(CardData cardData) {
-                        data.updateCardData(position, cardData);
-                        adapter.notifyItemChanged(position);
+                        data.addCardData(cardData);
+                        adapter.notifyItemInserted(data.size() - 1);
+// это сигнал, чтобы вызванный метод onCreateView
+// перепрыгнул на начало списка
+                        moveToFirstPosition = true;
+                    }
+                });
+                return true;
+            case R.id.action_update:
+                final int updatePosition = adapter.getMenuPosition();
+                navigation.addFragment(CardFragment.newInstance(data.getCardData(updatePosition)
+                ), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(CardData cardData) {
+                        data.updateCardData(updatePosition, cardData);
+                        adapter.notifyItemChanged(updatePosition);
                     }
                 });
                 return true;
             case R.id.action_delete:
-                data.deleteCardData(position);
-                adapter.notifyItemRemoved(position);
+                int deletePosition = adapter.getMenuPosition();
+                data.deleteCardData(deletePosition);
+                adapter.notifyItemRemoved(deletePosition);
+                return true;
+            case R.id.menu_clear:
+                data.clearCardData();
+                adapter.notifyDataSetChanged();
                 return true;
         }
-        return super.onContextItemSelected(item);
+        return false;
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -142,7 +157,7 @@ public class ListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
 // Установим адаптер
-        adapter = new ListFragmentAdapter(data, this);
+        adapter = new ListFragmentAdapter(this);
         recyclerView.setAdapter(adapter);
 
         // Добавим разделитель карточек
@@ -156,6 +171,12 @@ public class ListFragment extends Fragment {
         animator.setAddDuration(MY_DEFAULT_DURATION);
         animator.setRemoveDuration(MY_DEFAULT_DURATION);
         recyclerView.setItemAnimator(animator);
+
+        if (moveToFirstPosition && data.size() > 0){
+            recyclerView.scrollToPosition(0);
+            moveToFirstPosition = false;
+        }
+
 
         // Установим слушателя
         adapter.SetOnItemClickListener(new ListFragmentAdapter.OnItemClickListener() {

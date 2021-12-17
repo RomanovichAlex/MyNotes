@@ -7,12 +7,13 @@ import java.util.Date;
 
 
 public class CardData implements Parcelable {
+    private String id; // идентификатор
+
     private final String title; // заголовок
     private final String description; // описание
     private final int picture; // изображение
     private final boolean ready; // флажок
     private final Date date; // дата
-
 
     public CardData(String title, String description, int picture, boolean ready,Date date){
         this.title = title;
@@ -53,6 +54,7 @@ public class CardData implements Parcelable {
             return new CardData[size];
         }
     };
+
     public String getTitle() {
         return title;
     }
@@ -65,6 +67,13 @@ public class CardData implements Parcelable {
     public boolean isReady() {
         return ready;
     }
-
     public Date getDate() { return date; }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

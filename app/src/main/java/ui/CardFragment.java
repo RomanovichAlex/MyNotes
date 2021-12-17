@@ -12,13 +12,14 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 
 import by.romanovich.mynotes.MainActivity;
 import by.romanovich.mynotes.R;
 import by.romanovich.mynotes.observe.Publisher;
 import data.CardData;
+import data.PictureIndexConverter;
 
 public class CardFragment extends Fragment {
     private static final String ARG_CARD_DATA = "Param_CardData";
@@ -114,16 +115,18 @@ public class CardFragment extends Fragment {
         String title = this.title.getText().toString();
         String description = this.description.toString();
         Date date = getDateFromDatePicker();
-        int picture;
-        boolean ready;
         if (cardData != null){
-            picture = cardData.getPicture();
-            ready = cardData.isReady();
+            CardData answer;
+            answer = new CardData(title, description, cardData.getPicture(),
+                    cardData.isReady(), date);
+            answer.setId(cardData.getId());
+            return answer;
         } else {
-            picture = R.drawable.nature1;
-            ready = false;
+            int picture =
+                    PictureIndexConverter.getPictureByIndex(PictureIndexConverter.randomPictureIndex
+                            ());
+            return new CardData(title, description, picture, false, date);
         }
-        return new CardData(title, description, picture, ready, date);
     }
 
     // Получение даты из DatePicker

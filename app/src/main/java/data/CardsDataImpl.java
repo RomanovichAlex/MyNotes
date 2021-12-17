@@ -16,7 +16,7 @@ public class CardsDataImpl implements CardsSource {
         dataSource = new ArrayList<>(4);
         this.resource = resources;
     }
-    public CardsSource init(){
+    public CardsSource init(CardsSourceResponse cardsSourceResponse){
 // строки заголовков из ресурсов
         String[] titles = resource.getStringArray(R.array.nameOfTheNote);
 // строки описаний из ресурсов
@@ -28,6 +28,11 @@ public class CardsDataImpl implements CardsSource {
             dataSource.add(new CardData(titles[i], descriptions[i], pictures[i],
                     false, Calendar.getInstance().getTime()));
         }
+
+        if (cardsSourceResponse != null){
+            cardsSourceResponse.initialized(this);
+        }
+
         return this;
     }
 // Механизм вытаскивания идентификаторов картинок

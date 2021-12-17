@@ -23,15 +23,21 @@ public class ListFragmentAdapter extends RecyclerView.Adapter<ListFragmentAdapte
     private final static String TAG = "ListFragmentAdapter";
     private CardsSource dataSource;
     private final Fragment fragment;
-    private OnItemClickListener itemClickListener;
+    private OnItemClickListener itemClickListener;// Слушатель будетустанавливаться извне
     private int menuPosition;
 
     // Передаём в конструктор источник данных
 // В нашем случае это массив, но может быть и запрос к БД
-    public ListFragmentAdapter(CardsSource dataSource, Fragment fragment) {
-      this.dataSource = dataSource;
+    public ListFragmentAdapter(Fragment fragment) {
       this.fragment = fragment;
    }
+
+    public void setDataSource(CardsSource dataSource){
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
+    }
+
+
     // Создать новый элемент пользовательского интерфейса
 // Запускается менеджером
     @NonNull

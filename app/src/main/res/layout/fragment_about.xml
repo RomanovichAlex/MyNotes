@@ -4,10 +4,12 @@
     android:id="@+id/drawer_header"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
     >
+
     <TextView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
